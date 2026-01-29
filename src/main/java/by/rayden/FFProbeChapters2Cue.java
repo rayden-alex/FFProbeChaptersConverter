@@ -1,6 +1,8 @@
 package by.rayden;
 
 import by.rayden.ffprobe.Metadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -11,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 
 public class FFProbeChapters2Cue {
     static void main() {
+        final Logger log = LoggerFactory.getLogger(FFProbeChapters2Cue.class);
+
         Charset jsonCharset = StandardCharsets.UTF_8;
 
         // Read from PIPE
@@ -23,8 +27,7 @@ public class FFProbeChapters2Cue {
 
         Metadata ffProbeMetadata = mapper.readValue(reader, Metadata.class);
 
-        System.out.println("JSON read successfully!");
-        System.out.println();
+        log.info("JSON read successfully!");
 
         System.out.println(ffProbeMetadata.toString());
     }
