@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+}
+
+group = 'by.rayden'
+version = '1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    mockitoAgent
+}
+
+dependencies {
+    implementation platform('tools.jackson:jackson-bom:3.0.4')
+    implementation 'tools.jackson.core:jackson-databind'
+
+    testImplementation platform('org.junit:junit-bom:6.0.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation 'org.mockito:mockito-core:5.21.0'
+    mockitoAgent('org.mockito:mockito-core:5.21.0') {
+        transitive = false
+    }
+}
+
+jar {
+    // Locking the file name to avoid changing it every time in cmd-scripts
+    archiveFileName = 'FFProbeChapters2Cue.jar'
+
+    manifest {
+        attributes(
+                'Main-Class': 'by.rayden.FFProbeChapters2Cue',
+                'Build-Revision': '1.0'
+        )
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+
+    // to suppress WARNING like this:
+    // "A Java agent has been loaded dynamically...  byte-buddy-agent...",
+    // "OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes
+    // because bootstrap classpath has been appended"
+    jvmArgs += '-Xshare:off'
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+
+    // To show passed test in console output
+//    testLogging {
+//        events "passed", "skipped", "failed" // , "standardOut", "standardError"
+//   }
+
+}

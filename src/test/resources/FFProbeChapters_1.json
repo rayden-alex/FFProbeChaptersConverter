@@ -1,0 +1,203 @@
+{
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_long_name": "Opus (Opus Interactive Audio Codec)",
+            "codec_type": "audio",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "mime_codec_string": "opus",
+            "sample_fmt": "fltp",
+            "sample_rate": "48000",
+            "channels": 2,
+            "channel_layout": "stereo",
+            "bits_per_sample": 0,
+            "initial_padding": 312,
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/48000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "duration_ts": 70586880,
+            "duration": "1470.560000",
+            "extradata_size": 19,
+            "disposition": {
+                "default": 0,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+            },
+            "tags": {
+                "encoder": "Lavf62.8.102",
+                "language": "eng",
+                "title": "Melodic House Living Room Session with Live Vocals - Lynnic & ItsArius",
+                "date": "20251025",
+                "purl": "https://www.youtube.com/watch?v=CAGzxEDwAts",
+                "comment": "Enjoy this cozy melodic live session, playing some of our own favorite songs with live vocals in a shirt factory.\n\nBooking: booking@management-sms.com\n\nLynnic:\nhttps://www.instagram.com/lynnicmusic/\nhttps://open.spotify.com/artist/1jpObIFmNOGfBc93WowfkT?si=qT8Uo_rsRV-qg0mqYxWaLQ\n\nItsArius:\nhttps://www.instagram.com/itsarius/\nhttps://open.spotify.com/artist/6ObJnVTLETeHSeKhYreB27?si=uNS-HlspTUaPAerAE4bWlQ\n\nSingers:\nDinia: https://www.instagram.com/dinia.music/\nLilly: https://www.instagram.com/lillymusic_/\nMocean: https://www.instagram.com/mocean_arts/\n\nTracklist:\n00:00 Lynnic, ItsArius & Dinia - Maze Of Memories\n04:40 Lynnic, ItsArius & Dinia - Alone\n07:35 ItsArius & Lynnic - Cornfield Chase\n10:05 Lynnic & ItsArius feat. Lilly - Self Control\n13:43 Lynnic - Rise (feat. Lilly)\n16:36 Lynnic, ItsArius & Mocean - Keep Breathing\n20:02 Lynnic & Mocean - Together\n\nProduction:  \nab.agency\nhttps://www.instagram.com/wirsindaba/\n\nDirector:\nMehmet Akdag\nhttps://www.instagram.com/memocation/\n\nCamera: \nChris Brandt\nhttps://www.instagram.com/chris__brandt/\nChris Wellsow\nhttps://www.instagram.com/wellsowgraphy?igsh=MWxnaTUzdG5pOGl5eA%3D%3D\n\nPost Production: \nab.agency\nhttps://www.instagram.com/wirsindaba/\n\nLocation:\nFEINSIEBEN, Osnabrück, Germany\n\n#electronicmusic #mix #edm;https://www.youtube.com/watch?v=CAGzxEDwAts",
+                "artist": "Lynnic, ItsArius",
+                "genre": "Music",
+                "Url": "https://www.youtube.com/watch?v=CAGzxEDwAts"
+            }
+        },
+        {
+            "index": 1,
+            "codec_name": "mjpeg",
+            "codec_long_name": "Motion JPEG",
+            "profile": "Baseline",
+            "codec_type": "video",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "width": 1280,
+            "height": 720,
+            "coded_width": 1280,
+            "coded_height": 720,
+            "has_b_frames": 0,
+            "pix_fmt": "yuvj420p",
+            "level": -99,
+            "color_range": "pc",
+            "color_space": "bt470bg",
+            "chroma_location": "center",
+            "refs": 1,
+            "r_frame_rate": "90000/1",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/90000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "duration_ts": 132350400,
+            "duration": "1470.560000",
+            "bits_per_raw_sample": "8",
+            "disposition": {
+                "default": 0,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 1,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+            },
+            "tags": {
+                "comment": "Cover (front)"
+            }
+        }
+    ],
+    "chapters": [
+        {
+            "id": 0,
+            "time_base": "1/1000",
+            "start": 0,
+            "start_time": "0.000000",
+            "end": 280000,
+            "end_time": "280.000000",
+            "tags": {
+                "title": "Lynnic, ItsArius & Dinia - Maze Of Memories"
+            }
+        },
+        {
+            "id": 1,
+            "time_base": "1/1000",
+            "start": 280000,
+            "start_time": "280.000000",
+            "end": 455000,
+            "end_time": "455.000000",
+            "tags": {
+                "title": "Lynnic, ItsArius & Dinia - Alone"
+            }
+        },
+        {
+            "id": 2,
+            "time_base": "1/1000",
+            "start": 455000,
+            "start_time": "455.000000",
+            "end": 605000,
+            "end_time": "605.000000",
+            "tags": {
+                "title": "ItsArius & Lynnic - Cornfield Chase"
+            }
+        },
+        {
+            "id": 3,
+            "time_base": "1/1000",
+            "start": 605000,
+            "start_time": "605.000000",
+            "end": 823000,
+            "end_time": "823.000000",
+            "tags": {
+                "title": "Lynnic & ItsArius feat. Lilly - Self Control"
+            }
+        },
+        {
+            "id": 4,
+            "time_base": "1/1000",
+            "start": 823000,
+            "start_time": "823.000000",
+            "end": 996000,
+            "end_time": "996.000000",
+            "tags": {
+                "title": "Lynnic - Rise (feat. Lilly)"
+            }
+        },
+        {
+            "id": 5,
+            "time_base": "1/1000",
+            "start": 996000,
+            "start_time": "996.000000",
+            "end": 1202000,
+            "end_time": "1202.000000",
+            "tags": {
+                "title": "Lynnic, ItsArius & Mocean - Keep Breathing"
+            }
+        },
+        {
+            "id": 6,
+            "time_base": "1/1000",
+            "start": 1202000,
+            "start_time": "1202.000000",
+            "end": 1470560,
+            "end_time": "1470.560000",
+            "tags": {
+                "title": "Lynnic & Mocean - Together"
+            }
+        }
+    ],
+    "format": {
+        "filename": "g:\\Melodic House Living Room Session with Live Vocals - Lynnic & ItsArius [CAGzxEDwAts].opus",
+        "nb_streams": 2,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "ogg",
+        "format_long_name": "Ogg",
+        "start_time": "0.000000",
+        "duration": "1470.560000",
+        "size": "24477640",
+        "bit_rate": "133160",
+        "probe_score": 100
+    }
+}
