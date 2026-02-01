@@ -20,26 +20,34 @@ public class CliApplication {
     private final CueTransformer cueTransformer = new CueTransformer();
     private final ConvertService convertService = new ConvertService(this.ffProbeTransformer, this.cueTransformer);
 
-    public void run(String[] args) {
+    public int run(String[] args) throws Exception {
         CmdController.ParsedResult parsedResult = this.cmdController.getParseResult(args);
 
         switch (parsedResult) {
-            case HELP -> this.cmdController.printHelp();
+            case HELP -> {
+                this.cmdController.printHelp();
+                return 0;
+            }
 
             case CONVERT -> {
-                String inFileName = this.cmdController.getInFileName();
-                String outFileName = this.cmdController.getOutFileName();
                 try {
+                    String inFileName = this.cmdController.getInFileName();
+                    String outFileName = this.cmdController.getOutFileName();
+
                     this.convertService.convert(inFileName, outFileName);
+                    return 0;
                 } catch (Exception e) {
                     log.error("Converting error!", e);
+                    return 1;
                 }
             }
 
             case ERROR -> {
                 this.cmdController.printHelp();
-                System.exit(-1);
+                return 1;
             }
+
+            default -> throw new IllegalStateException("Unexpected ParsedResult value: " + parsedResult);
         }
     }
 

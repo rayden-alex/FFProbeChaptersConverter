@@ -65,16 +65,13 @@ public class CmdController {
                   .get());
     }
 
-    public void printHelp() {
+    public void printHelp() throws IOException {
         HelpFormatter helpFormatter = HelpFormatter.builder().setShowSince(false).get();
         helpFormatter.setSyntaxPrefix("Program usage:");
         String header = "Convert FFProbe chaptersList from JSON to CUE format.";
-        String footer = "Version 1.0.0 (2026-02-01 02:10:29)";
-        try {
-            helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String footer = "Version 1.0.1 (2026-02-01 03:16:47)";
+
+        helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }
 
     private ParsedResult processOptionsValues(CommandLine commandLine) {
