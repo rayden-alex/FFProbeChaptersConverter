@@ -51,9 +51,14 @@ public class CsvTransformer implements OutputTransformer {
         return escaped;
     }
 
+    /**
+     * @param millis Time in millis. For example 123456
+     * @return String formated as "s.sss" (seconds and millis part of second). For example "123.456".
+     */
     private String formatTime(int millis) {
+        final double MILLIS_PER_SECOND = 1000.0;
         // Set Locale.ROOT to always use dot as decimal delimiter
-        return String.format(Locale.ROOT, "%.3f", millis / 1000.0);
+        return String.format(Locale.ROOT, "%.3f", millis / MILLIS_PER_SECOND);
     }
 
 }
