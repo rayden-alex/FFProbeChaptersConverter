@@ -2,7 +2,7 @@
 chcp 65001 > nul
 
 echo Building new AOT cache ...
-java -XX:AOTCacheOutput=FFProbeChapters2Cue.aot -XX:+UseCompactObjectHeaders -jar .\build\libs\FFProbeChapters2Cue.jar -h
+java -XX:AOTCacheOutput=FFProbeChaptersConverter.aot -XX:+UseCompactObjectHeaders -jar .\build\libs\FFProbeChaptersConverter.jar -h
 
 echo ERRORLEVEL:%ERRORLEVEL%
 

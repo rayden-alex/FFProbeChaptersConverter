@@ -1,4 +1,4 @@
-package by.rayden.ffprobechapters2cue.ffprobe;
+package by.rayden.ffprobechaptersconverter.ffprobe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

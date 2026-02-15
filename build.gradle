@@ -31,6 +31,11 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:6.0.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0") {
+        capabilities {
+            requireCapability("org.junit-pioneer:junit-pioneer-jackson")
+        }
+    }
 
     testImplementation 'org.assertj:assertj-core:3.27.7'
 
@@ -42,12 +47,12 @@ dependencies {
 
 jar {
     // Locking the file name to avoid changing it every time in cmd-scripts
-    archiveFileName = 'FFProbeChapters2Cue.jar'
+    archiveFileName = 'FFProbeChaptersConverter.jar'
 
     manifest {
         attributes(
-                'Main-Class': 'by.rayden.ffprobechapters2cue.FFProbeChapters2Cue',
-                'Build-Revision': '1.0'
+                'Main-Class': 'by.rayden.ffprobechaptersconverter.FFProbeChaptersConverter',
+                'Build-Revision': '1.2.0'
         )
     }
 

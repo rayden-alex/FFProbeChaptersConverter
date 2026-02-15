@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 > nul
 
-echo {} | java -XX:AOTCache=..\FFProbeChapters2Cue.aot -XX:+UseCompactObjectHeaders -jar ..\build\libs\FFProbeChapters2Cue.jar
+echo {} | java -XX:AOTCache=..\FFProbeChaptersConverter.aot -XX:+UseCompactObjectHeaders -jar ..\build\libs\FFProbeChaptersConverter.jar
 
 if %ERRORLEVEL% NEQ 0 (
   echo ERRORLEVEL: %ERRORLEVEL%

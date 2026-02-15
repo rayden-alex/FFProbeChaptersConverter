@@ -1,4 +1,4 @@
-package by.rayden.ffprobechapters2cue;
+package by.rayden.ffprobechaptersconverter;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -25,6 +25,9 @@ public class CmdController {
 
     @Nullable
     private String outFileName;
+
+    @Nullable
+    private OutputFormat outputFormat;
 
 
     public ParsedResult getParseResult(String[] args) {
@@ -58,6 +61,15 @@ public class CmdController {
                   .get());
 
         this.options.addOption(
+            Option.builder("f")
+                  .longOpt("format")
+                  .hasArg()
+                  .argName("CUE, CSV")
+                  .desc("Output format. Default is CUE.")
+                  .converter(OutputFormat::valueOf)
+                  .get());
+
+        this.options.addOption(
             Option.builder("h")
                   .longOpt("help")
                   .hasArg(false)
@@ -68,19 +80,22 @@ public class CmdController {
     public void printHelp() throws IOException {
         HelpFormatter helpFormatter = HelpFormatter.builder().setShowSince(false).get();
         helpFormatter.setSyntaxPrefix("Program usage:");
-        String header = "Convert FFProbe chaptersList from JSON to CUE format.";
-        String footer = "Version 1.0.1 (2026-02-01 03:16:47)";
+        String header = "Convert FFProbe chaptersList from JSON to CUE or CSV format.";
+        String footer = "Version 1.2.0 (2026-02-15 07:14:16)";
 
         helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }
 
-    private ParsedResult processOptionsValues(CommandLine commandLine) {
+    private ParsedResult processOptionsValues(CommandLine commandLine) throws ParseException {
+        this.outputFormat = commandLine.getParsedOptionValue("format", OutputFormat.CUE);
+
         if (commandLine.hasOption("help")) {
             return ParsedResult.HELP;
 
         } else {
             this.inFileName = commandLine.getOptionValue("in-file", "-");
             this.outFileName = commandLine.getOptionValue("out-file", "-");
+
             return ParsedResult.CONVERT;
         }
     }
@@ -92,4 +107,9 @@ public class CmdController {
     public String getOutFileName() {
         return Objects.requireNonNull(this.outFileName);
     }
+
+    public OutputFormat getOutputFormat() {
+        return Objects.requireNonNull(this.outputFormat);
+    }
+
 }

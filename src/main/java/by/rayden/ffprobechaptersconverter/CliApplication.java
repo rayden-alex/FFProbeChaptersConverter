@@ -1,12 +1,17 @@
-package by.rayden.ffprobechapters2cue;
+package by.rayden.ffprobechaptersconverter;
 
+import by.rayden.ffprobechaptersconverter.service.ConvertService;
+import by.rayden.ffprobechaptersconverter.service.CsvTransformer;
+import by.rayden.ffprobechaptersconverter.service.CueTransformer;
+import by.rayden.ffprobechaptersconverter.service.FFProbeTransformer;
+import by.rayden.ffprobechaptersconverter.service.OutputTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 public class CliApplication {
-    public static final String APP_NAME = "FFProbeChapters2Cue";
+    public static final String APP_NAME = "FFProbeChaptersConverter";
     private static final Logger log = LoggerFactory.getLogger(CliApplication.class);
 
     private final JsonMapper mapper = JsonMapper
@@ -18,7 +23,17 @@ public class CliApplication {
     private final CmdController cmdController = new CmdController();
     private final FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(this.mapper);
     private final CueTransformer cueTransformer = new CueTransformer();
-    private final ConvertService convertService = new ConvertService(this.ffProbeTransformer, this.cueTransformer);
+    private final CsvTransformer csvTransformer = new CsvTransformer();
+    private final ConvertService convertService = new ConvertService(this.ffProbeTransformer,
+        this::getOutputTransformer);
+
+    private OutputTransformer getOutputTransformer() {
+        return switch (this.cmdController.getOutputFormat()) {
+            case CUE -> this.cueTransformer;
+            case CSV -> this.csvTransformer;
+        };
+    }
+
 
     public int run(String[] args) throws Exception {
         CmdController.ParsedResult parsedResult = this.cmdController.getParseResult(args);

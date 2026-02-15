@@ -9,7 +9,7 @@ set "_ffprobe=c:\Rip\ffmpeg\bin\ffprobe.exe -hide_banner  -v error "
 echo Creating %in_file%
 
 %_ffprobe% -i %in_file% -of json -show_format -show_streams -show_chapters | ^
-java -XX:AOTCache=FFProbeChapters2Cue.aot -XX:+UseCompactObjectHeaders -jar .\build\libs\FFProbeChapters2Cue.jar > ^
+java -XX:AOTCache=FFProbeChaptersConverter.aot -XX:+UseCompactObjectHeaders -jar .\build\libs\FFProbeChaptersConverter.jar > ^
 "%out_cue_file%"
 
 timeout /t 5

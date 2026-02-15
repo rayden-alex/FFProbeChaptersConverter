@@ -1,10 +1,10 @@
-package by.rayden.ffprobechapters2cue;
+package by.rayden.ffprobechaptersconverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FFProbeChapters2Cue {
-    private static final Logger log = LoggerFactory.getLogger(FFProbeChapters2Cue.class);
+public class FFProbeChaptersConverter {
+    private static final Logger log = LoggerFactory.getLogger(FFProbeChaptersConverter.class);
 
     static void main(String[] args) {
         try {

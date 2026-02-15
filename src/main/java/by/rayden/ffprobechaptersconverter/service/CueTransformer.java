@@ -1,9 +1,8 @@
-package by.rayden.ffprobechapters2cue;
+package by.rayden.ffprobechaptersconverter.service;
 
-import by.rayden.ffprobechapters2cue.ffprobe.ChaptersItem;
-import by.rayden.ffprobechapters2cue.ffprobe.FFProbeMetadata;
-import by.rayden.ffprobechapters2cue.ffprobe.StreamsItem;
-import by.rayden.ffprobechapters2cue.ffprobe.Tags;
+import by.rayden.ffprobechaptersconverter.ffprobe.ChaptersItem;
+import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
+import by.rayden.ffprobechaptersconverter.ffprobe.Tags;
 import org.digitalmediaserver.cuelib.CueSheet;
 import org.digitalmediaserver.cuelib.CueSheetSerializer;
 import org.digitalmediaserver.cuelib.FileData;
@@ -19,11 +18,10 @@ import java.nio.file.Path;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.Comparator;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class CueTransformer {
+public class CueTransformer implements OutputTransformer {
     private static final Logger log = LoggerFactory.getLogger(CueTransformer.class);
     private static final long NANOS_PER_SECOND = 1000_000_000L;
     private static final long NANOS_PER_MILLI = 1000_000L;
@@ -37,7 +35,8 @@ public class CueTransformer {
     private static final int START_OF_TRACK_IDX = 1;
 
 
-    public String transformToCue(final FFProbeMetadata metadata) {
+    @Override
+    public String transform(final FFProbeChaptersMetadata metadata) {
         if (!isFormatValid(metadata)) {
             log.error("Invalid FFProbe metadata format");
             throw new IllegalArgumentException("Invalid FFProbe metadata format");
@@ -81,24 +80,12 @@ public class CueTransformer {
                        .orElseThrow(() -> new NoSuchElementException("No 'format.filename' field present in metadata"));
     }
 
-    private Optional<Tags> getFirstAudioTags(final List<StreamsItem> streamsList) {
-        return streamsList
-            .stream()
-            .filter(item -> "audio".equalsIgnoreCase(item.codecType()))
-            .findFirst()
-            .map(StreamsItem::tags);
-    }
-
-    private boolean isFormatValid(final FFProbeMetadata ffProbeMetadata) {
-        return !ffProbeMetadata.streamsList().isEmpty() && !ffProbeMetadata.chaptersList().isEmpty();
-    }
-
     private void processChapter(final ChaptersItem chaptersItem, final FileData fileData) {
         TrackData track = new TrackData(fileData, chaptersItem.id() + 1, "AUDIO"); // Cue track number starts from 1.
 
+        String chapterTitle = Optional.ofNullable(chaptersItem.tags()).map(Tags::title).orElse("");
         // TODO The standard allows no more than 80 characters.
         //  But for my purposes, maybe it's acceptable to not have this limit?
-        String chapterTitle = chaptersItem.tags().title();
         track.setTitle(chapterTitle); // .substring(0, 80)
         fileData.getTrackData().add(track);
 
