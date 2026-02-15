@@ -1,20 +1,29 @@
 package by.rayden.ffprobechaptersconverter.service;
 
-import by.rayden.ffprobechaptersconverter.Jackson3JsonClasspathSource;
+import by.rayden.ffprobechaptersconverter.CliApplication;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
-import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CsvTransformerTest {
+    // Use the same mapper as in the main application.
+    JsonMapper jsonMapper = CliApplication.getJsonMapper();
+
+    FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(this.jsonMapper);
     CsvTransformer csvTransformer = new CsvTransformer();
 
-    @ParameterizedTest
-//    @JsonClasspathSource("FFProbeChapters_1.json") // Uses Jackson2 implementation.
-//    Although we can use the 2nd and 3rd versions at the same time,
-//    then a custom annotation is used to use the same mapper as in the main application.
-    @Jackson3JsonClasspathSource("FFProbeChapters_1.json")
-    void testTransform(FFProbeChaptersMetadata metadata) {
+    @Test
+    void testTransform() throws IOException {
+        FFProbeChaptersMetadata metadata = getChaptersMetadata("FFProbeChapters_1.json");
+
         String result = this.csvTransformer.transform(metadata);
 
         String expected = """
@@ -29,6 +38,14 @@ class CsvTransformerTest {
 
         // Java text blocks use \n as line delimiter, so we need a normalization before comparing
         assertThat(result).isEqualToNormalizingNewlines(expected);
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private FFProbeChaptersMetadata getChaptersMetadata(String fileName) throws IOException {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
+            return this.ffProbeTransformer.getMetadata(reader);
+        }
     }
 
 }
