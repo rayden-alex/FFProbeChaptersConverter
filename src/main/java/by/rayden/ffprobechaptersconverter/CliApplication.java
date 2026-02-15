@@ -14,14 +14,16 @@ public class CliApplication {
     public static final String APP_NAME = "FFProbeChaptersConverter";
     private static final Logger log = LoggerFactory.getLogger(CliApplication.class);
 
-    private final JsonMapper mapper = JsonMapper
+
+    private static final JsonMapper mapper = JsonMapper
         .builder()
+        .findAndAddModules()
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
         .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
         .build();
 
     private final CmdController cmdController = new CmdController();
-    private final FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(this.mapper);
+    private final FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(mapper);
     private final CueTransformer cueTransformer = new CueTransformer();
     private final CsvTransformer csvTransformer = new CsvTransformer();
     private final ConvertService convertService = new ConvertService(this.ffProbeTransformer,
@@ -64,6 +66,10 @@ public class CliApplication {
 
             default -> throw new IllegalStateException("Unexpected ParsedResult value: " + parsedResult);
         }
+    }
+
+    public static JsonMapper getJsonMapper() {
+        return mapper;
     }
 
 }

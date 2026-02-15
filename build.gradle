@@ -31,11 +31,11 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:6.0.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0") {
-        capabilities {
-            requireCapability("org.junit-pioneer:junit-pioneer-jackson")
-        }
-    }
+//    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0") {
+//        capabilities {
+//            requireCapability("org.junit-pioneer:junit-pioneer-jackson") // Uses Jackson2 implementation :(
+//        }
+//    }
 
     testImplementation 'org.assertj:assertj-core:3.27.7'
 

@@ -1,8 +1,8 @@
 package by.rayden.ffprobechaptersconverter.service;
 
+import by.rayden.ffprobechaptersconverter.Jackson3JsonClasspathSource;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junitpioneer.jupiter.json.JsonClasspathSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,10 @@ class CsvTransformerTest {
     CsvTransformer csvTransformer = new CsvTransformer();
 
     @ParameterizedTest
-    @JsonClasspathSource("FFProbeChapters_1.json")
+//    @JsonClasspathSource("FFProbeChapters_1.json") // Uses Jackson2 implementation.
+//    Although we can use the 2nd and 3rd versions at the same time,
+//    then a custom annotation is used to use the same mapper as in the main application.
+    @Jackson3JsonClasspathSource("FFProbeChapters_1.json")
     void testTransform(FFProbeChaptersMetadata metadata) {
         String result = this.csvTransformer.transform(metadata);
 
