@@ -63,6 +63,40 @@ jar {
     }
 }
 
+tasks.register('generateAotCache', JavaExec) {
+    group = 'build'
+    description = 'Generates AOT Cache for the Java application'
+
+    // Depending on the JAR build.
+    dependsOn tasks.jar
+
+    // Dynamically get the launcher from the project's toolchain settings to ensure
+    // that javac (compilation) and java (cache generation in the generateAotCache task)
+    // use the same JDK 25 binary file.
+    def service = project.extensions.getByType(JavaToolchainService)
+    javaLauncher = service.launcherFor(java.toolchain)
+
+    // Setting up a training run:
+    // take a freshly assembled JAR and specify the Main class.
+    classpath = files(tasks.jar.archiveFile)
+    mainClass = 'by.rayden.ffprobechaptersconverter.FFProbeChaptersConverter'
+
+    // Java 25 AOT-Cache write options
+    jvmArgs = [
+            "-XX:AOTCacheOutput=${layout.buildDirectory.get()}\\libs\\FFProbeChaptersConverter.aot",
+            "-XX:+UseCompactObjectHeaders"
+    ]
+
+    // Training run (must end with code 0).
+    // The CLI must do minimal work and shut down to save the cache.
+    args = ['--help']
+}
+
+// Link "generateAotCache" task to the build cycle: the cache will be created immediately after the "build"
+tasks.named('build') {
+    finalizedBy 'generateAotCache'
+}
+
 test {
     useJUnitPlatform()
 
