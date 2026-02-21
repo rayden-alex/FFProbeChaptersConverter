@@ -4,16 +4,17 @@ import by.rayden.ffprobechaptersconverter.service.ConvertService;
 import by.rayden.ffprobechaptersconverter.service.CsvTransformer;
 import by.rayden.ffprobechaptersconverter.service.CueTransformer;
 import by.rayden.ffprobechaptersconverter.service.FFProbeTransformer;
-import by.rayden.ffprobechaptersconverter.service.OutputTransformer;
+import by.rayden.ffprobechaptersconverter.service.OutputTransformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.util.List;
+
 public class CliApplication {
     public static final String APP_NAME = "FFProbeChaptersConverter";
     private static final Logger log = LoggerFactory.getLogger(CliApplication.class);
-
 
     private static final JsonMapper mapper = JsonMapper
         .builder()
@@ -22,19 +23,16 @@ public class CliApplication {
         .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
         .build();
 
-    private final CmdController cmdController = new CmdController();
     private final FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(mapper);
+    private final CmdController cmdController = new CmdController();
     private final CueTransformer cueTransformer = new CueTransformer();
     private final CsvTransformer csvTransformer = new CsvTransformer();
-    private final ConvertService convertService = new ConvertService(this.ffProbeTransformer,
-        this::getOutputTransformer);
 
-    private OutputTransformer getOutputTransformer() {
-        return switch (this.cmdController.getOutputFormat()) {
-            case CUE -> this.cueTransformer;
-            case CSV -> this.csvTransformer;
-        };
-    }
+    private final OutputTransformerFactory outputTransformerFactory =
+        new OutputTransformerFactory(List.of(this.cueTransformer, this.csvTransformer));
+
+    private final ConvertService convertService =
+        new ConvertService(this.ffProbeTransformer, this.outputTransformerFactory);
 
 
     public int run(String[] args) throws Exception {
@@ -50,8 +48,9 @@ public class CliApplication {
                 try {
                     String inFileName = this.cmdController.getInFileName();
                     String outFileName = this.cmdController.getOutFileName();
+                    OutputFormat outputFormat = this.cmdController.getOutputFormat();
 
-                    this.convertService.convert(inFileName, outFileName);
+                    this.convertService.convert(inFileName, outFileName, outputFormat);
                     return 0;
                 } catch (Exception e) {
                     log.error("Converting error!", e);

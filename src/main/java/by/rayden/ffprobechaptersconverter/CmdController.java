@@ -78,23 +78,22 @@ public class CmdController {
     }
 
     public void printHelp() throws IOException {
-        HelpFormatter helpFormatter = HelpFormatter.builder().setShowSince(false).get();
+        var  helpFormatter = HelpFormatter.builder().setShowSince(false).get();
         helpFormatter.setSyntaxPrefix("Program usage:");
         String header = "Convert FFProbe chaptersList from JSON to CUE or CSV format.";
-        String footer = "Version 1.2.0 (2026-02-15 07:14:16)";
+        String footer = "Version 1.2.1 (2026-02-21 07:07:17)";
 
         helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }
 
-    private ParsedResult processOptionsValues(CommandLine commandLine) throws ParseException {
-        this.outputFormat = commandLine.getParsedOptionValue("format", OutputFormat.CUE);
-
-        if (commandLine.hasOption("help")) {
+    private ParsedResult processOptionsValues(CommandLine cmd) throws ParseException {
+        if (cmd.hasOption("help")) {
             return ParsedResult.HELP;
 
         } else {
-            this.inFileName = commandLine.getOptionValue("in-file", "-");
-            this.outFileName = commandLine.getOptionValue("out-file", "-");
+            this.inFileName = cmd.getOptionValue("in-file", "-");
+            this.outFileName = cmd.getOptionValue("out-file", "-");
+            this.outputFormat = cmd.getParsedOptionValue("format", OutputFormat.CUE);
 
             return ParsedResult.CONVERT;
         }

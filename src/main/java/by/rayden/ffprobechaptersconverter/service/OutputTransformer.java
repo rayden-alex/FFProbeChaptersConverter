@@ -1,5 +1,6 @@
 package by.rayden.ffprobechaptersconverter.service;
 
+import by.rayden.ffprobechaptersconverter.OutputFormat;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
 import by.rayden.ffprobechaptersconverter.ffprobe.StreamsItem;
 import by.rayden.ffprobechaptersconverter.ffprobe.Tags;
@@ -8,8 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OutputTransformer {
+    OutputFormat getOutputFormat();
 
-    String transform(final FFProbeChaptersMetadata metadata);
+    String transform(FFProbeChaptersMetadata metadata);
 
     default Optional<Tags> getFirstAudioTags(List<StreamsItem> streamsList) {
         return streamsList

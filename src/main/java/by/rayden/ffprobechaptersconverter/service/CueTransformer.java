@@ -1,5 +1,6 @@
 package by.rayden.ffprobechaptersconverter.service;
 
+import by.rayden.ffprobechaptersconverter.OutputFormat;
 import by.rayden.ffprobechaptersconverter.ffprobe.ChaptersItem;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
 import by.rayden.ffprobechaptersconverter.ffprobe.Tags;
@@ -34,6 +35,11 @@ public class CueTransformer implements OutputTransformer {
 
     private static final int START_OF_TRACK_IDX = 1;
 
+
+    @Override
+    public OutputFormat getOutputFormat() {
+        return OutputFormat.CUE;
+    }
 
     @Override
     public String transform(final FFProbeChaptersMetadata metadata) {
@@ -81,7 +87,8 @@ public class CueTransformer implements OutputTransformer {
     }
 
     private void processChapter(final ChaptersItem chaptersItem, final FileData fileData) {
-        TrackData track = new TrackData(fileData, chaptersItem.id() + 1, "AUDIO"); // Cue track number starts from 1.
+        int trackNum = chaptersItem.id() + 1; // Cue track number starts from 1.
+        TrackData track = new TrackData(fileData, trackNum, "AUDIO");
 
         String chapterTitle = Optional.ofNullable(chaptersItem.tags()).map(Tags::title).orElse("");
         // TODO The standard allows no more than 80 characters.

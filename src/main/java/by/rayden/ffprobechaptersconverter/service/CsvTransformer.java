@@ -1,5 +1,6 @@
 package by.rayden.ffprobechaptersconverter.service;
 
+import by.rayden.ffprobechaptersconverter.OutputFormat;
 import by.rayden.ffprobechaptersconverter.ffprobe.ChaptersItem;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
 import by.rayden.ffprobechaptersconverter.ffprobe.Tags;
@@ -9,6 +10,11 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class CsvTransformer implements OutputTransformer {
+    @Override
+    public OutputFormat getOutputFormat() {
+        return OutputFormat.CSV;
+    }
+
     @Override
     public String transform(FFProbeChaptersMetadata metadata) {
         StringBuilder stringBuilder = new StringBuilder();
