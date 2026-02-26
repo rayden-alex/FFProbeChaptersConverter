@@ -12,7 +12,7 @@ public class FFProbeTransformer {
         this.mapper = mapper;
     }
 
-    public FFProbeChaptersMetadata getMetadata(final Reader reader) {
+    public FFProbeChaptersMetadata getMetadata(Reader reader) {
         return this.mapper.readValue(reader, FFProbeChaptersMetadata.class);
     }
 

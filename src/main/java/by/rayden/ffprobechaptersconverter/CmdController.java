@@ -64,7 +64,7 @@ public class CmdController {
             Option.builder("f")
                   .longOpt("format")
                   .hasArg()
-                  .argName("CUE, CSV")
+                  .argName("CUE, CSV, CMD")
                   .desc("Output format. Default is CUE.")
                   .converter(OutputFormat::valueOf)
                   .get());
@@ -80,8 +80,8 @@ public class CmdController {
     public void printHelp() throws IOException {
         var  helpFormatter = HelpFormatter.builder().setShowSince(false).get();
         helpFormatter.setSyntaxPrefix("Program usage:");
-        String header = "Convert FFProbe chaptersList from JSON to CUE or CSV format.";
-        String footer = "Version 1.2.1 (2026-02-21 07:07:17)";
+        String header = "Convert FFProbe chaptersList from JSON to CUE, CSV or CMD format.";
+        String footer = "Version 1.3.0 (2026-02-26 08:37:28)";
 
         helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }

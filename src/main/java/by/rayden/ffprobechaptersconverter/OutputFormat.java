@@ -2,5 +2,6 @@ package by.rayden.ffprobechaptersconverter;
 
 public enum OutputFormat {
     CUE,
-    CSV
+    CSV,
+    CMD
 }

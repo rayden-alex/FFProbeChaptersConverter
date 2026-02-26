@@ -2,6 +2,7 @@ package by.rayden.ffprobechaptersconverter.service;
 
 import by.rayden.ffprobechaptersconverter.CliApplication;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -14,17 +15,24 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CsvTransformerTest {
-    // Use the same mapper as in the main application.
-    JsonMapper jsonMapper = CliApplication.getJsonMapper();
+    static JsonMapper jsonMapper;
+    static FFProbeTransformer ffProbeTransformer;
+    static OutputTransformer transformer;
 
-    FFProbeTransformer ffProbeTransformer = new FFProbeTransformer(this.jsonMapper);
-    CsvTransformer csvTransformer = new CsvTransformer();
+    @BeforeAll
+    static void beforeAll() {
+        // Use the same mapper as in the main application.
+        jsonMapper = CliApplication.getJsonMapper();
+
+        ffProbeTransformer = new FFProbeTransformer(jsonMapper);
+        transformer = new CsvTransformer();
+    }
 
     @Test
     void testTransform() throws IOException {
         FFProbeChaptersMetadata metadata = getChaptersMetadata("FFProbeChapters_1.json");
 
-        String result = this.csvTransformer.transform(metadata);
+        String result = transformer.transform(metadata);
 
         String expected = """
             0.000,280.000,1,"Lynnic, ItsArius & Dinia - Maze Of Memories"
@@ -44,7 +52,7 @@ class CsvTransformerTest {
     private FFProbeChaptersMetadata getChaptersMetadata(String fileName) throws IOException {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
              BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
-            return this.ffProbeTransformer.getMetadata(reader);
+            return ffProbeTransformer.getMetadata(reader);
         }
     }
 

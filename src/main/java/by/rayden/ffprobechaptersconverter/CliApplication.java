@@ -4,6 +4,7 @@ import by.rayden.ffprobechaptersconverter.service.ConvertService;
 import by.rayden.ffprobechaptersconverter.service.CsvTransformer;
 import by.rayden.ffprobechaptersconverter.service.CueTransformer;
 import by.rayden.ffprobechaptersconverter.service.FFProbeTransformer;
+import by.rayden.ffprobechaptersconverter.service.FFMpegSliceCmdTransformer;
 import by.rayden.ffprobechaptersconverter.service.OutputTransformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,10 @@ public class CliApplication {
     private final CmdController cmdController = new CmdController();
     private final CueTransformer cueTransformer = new CueTransformer();
     private final CsvTransformer csvTransformer = new CsvTransformer();
+    private final FFMpegSliceCmdTransformer ffmpegSliceCmdTransformer = new FFMpegSliceCmdTransformer();
 
     private final OutputTransformerFactory outputTransformerFactory =
-        new OutputTransformerFactory(List.of(this.cueTransformer, this.csvTransformer));
+        new OutputTransformerFactory(List.of(this.cueTransformer, this.csvTransformer, this.ffmpegSliceCmdTransformer));
 
     private final ConvertService convertService =
         new ConvertService(this.ffProbeTransformer, this.outputTransformerFactory);
