@@ -3,6 +3,7 @@ package by.rayden.ffprobechaptersconverter.service;
 import by.rayden.ffprobechaptersconverter.OutputFormat;
 import by.rayden.ffprobechaptersconverter.ffprobe.ChaptersItem;
 import by.rayden.ffprobechaptersconverter.ffprobe.FFProbeChaptersMetadata;
+import by.rayden.ffprobechaptersconverter.ffprobe.Format;
 import by.rayden.ffprobechaptersconverter.ffprobe.Tags;
 import org.digitalmediaserver.cuelib.CueSheet;
 import org.digitalmediaserver.cuelib.CueSheetSerializer;
@@ -10,7 +11,6 @@ import org.digitalmediaserver.cuelib.FileData;
 import org.digitalmediaserver.cuelib.Index;
 import org.digitalmediaserver.cuelib.Position;
 import org.digitalmediaserver.cuelib.TrackData;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class CueTransformer implements OutputTransformer {
         audioTags.map(Tags::date).map(this::getYearFromDateString).ifPresent(cueSheet::setYear);
 //        audioTags.map(Tags::url).ifPresent(cueSheet::setComment);
 
-        String filename = getAudioFilename(metadata.format().filename());
+        String filename = getAudioFilename(metadata);
         FileData fileData = new FileData(cueSheet, filename, "WAVE");
         cueSheet.getFileData().add(fileData);
 
@@ -78,25 +78,27 @@ public class CueTransformer implements OutputTransformer {
         return Integer.parseInt(dateStr.substring(0, 4));
     }
 
-    private String getAudioFilename(@Nullable final String filename) {
-        return Optional.ofNullable(filename)
+    private String getAudioFilename(FFProbeChaptersMetadata metadata) {
+        return Optional.of(metadata)
+                       .map(FFProbeChaptersMetadata::format)
+                       .map(Format::filename)
                        .map(Path::of)
                        .map(Path::getFileName)
                        .map(Path::toString)
                        .orElseThrow(() -> new NoSuchElementException("No 'format.filename' field present in metadata"));
     }
 
-    private void processChapter(final ChaptersItem chaptersItem, final FileData fileData) {
-        int trackNum = chaptersItem.id() + 1; // Cue track number starts from 1.
+    private void processChapter(final ChaptersItem chapter, final FileData fileData) {
+        int trackNum = chapter.id() + 1; // Cue track number starts from 1.
         TrackData track = new TrackData(fileData, trackNum, "AUDIO");
 
-        String chapterTitle = Optional.ofNullable(chaptersItem.tags()).map(Tags::title).orElse("");
+        String chapterTitle = Optional.ofNullable(chapter.tags()).map(Tags::title).orElse("");
         // TODO The standard allows no more than 80 characters.
         //  But for my purposes, maybe it's acceptable to not have this limit?
         track.setTitle(chapterTitle); // .substring(0, 80)
         fileData.getTrackData().add(track);
 
-        Position position = CueTransformer.getPositionFromMillis(chaptersItem.start());
+        Position position = CueTransformer.getPositionFromMillis(chapter.start());
 
         Index index = new Index(START_OF_TRACK_IDX, position); // The StartIndex of the track is always "01".
         track.getIndices().add(index);
