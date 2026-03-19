@@ -54,14 +54,18 @@ public class CliApplication {
         new ConvertService(this.ffProbeTransformer, this.outputTransformerFactory);
 
 
-    public int run(String[] args) throws Exception {
-        CmdController.ParsedResult parsedResult = this.cmdController.getParseResult(args);
     public ExitStatusCode run(String[] args) throws Exception {
+        this.cmdController.configureOptions();
         CmdController.ParsedCmd parsedCmd = this.cmdController.getParseResult(args);
 
         return switch (parsedCmd) {
             case HELP -> {
                 this.cmdController.printHelp();
+                yield ExitStatusCode.OK;
+            }
+
+            case VERSION -> {
+                this.cmdController.printVersion();
                 yield ExitStatusCode.OK;
             }
 

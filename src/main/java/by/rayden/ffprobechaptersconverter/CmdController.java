@@ -6,6 +6,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.help.HelpFormatter;
+import org.apache.commons.cli.help.TextHelpAppendable;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +15,35 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class CmdController {
-    public enum ParsedResult {ERROR, HELP, CONVERT}
+
+    public enum ParsedCmd {
+        ERROR(""),
+        HELP("help"),
+        CONVERT(""),
+        VERSION("version");
+
+        private final String optionName;
+
+        ParsedCmd(String optionName) {
+            this.optionName = optionName;
+        }
+
+        /**
+         * @return the option long name that corresponds to this command
+         */
+        public String getOptionName() {
+            return this.optionName;
+        }
+    }
 
     private static final Logger log = LoggerFactory.getLogger(CmdController.class);
 
-    private final Options options = new Options();
+    /**
+     * The number of characters per line in help output: {@value}.
+     */
+    private static final int MAX_WIDTH = 100;
+
+    private Options options = new Options();
 
     @Nullable
     private String inFileName;
@@ -30,20 +55,20 @@ public class CmdController {
     private OutputFormat outputFormat;
 
 
-    public ParsedResult getParseResult(String[] args) {
-        configureOptions();
-
-        var parser = new DefaultParser();
+    public ParsedCmd getParseResult(String[] args) {
         try {
-            CommandLine cmd = parser.parse(this.options, args);
+            CommandLine cmd = new DefaultParser().parse(this.options, args);
             return processOptionsValues(cmd);
         } catch (ParseException e) {
             log.error("Error parsing command line arguments: {}", e.getMessage());
-            return ParsedResult.ERROR;
+            return ParsedCmd.ERROR;
         }
     }
 
-    private void configureOptions() {
+    public void configureOptions() {
+        // Create "Options" from scratch in case this method will be called multiple times
+        this.options = new Options();
+
         this.options.addOption(
             Option.builder("i")
                   .longOpt("in-file")
@@ -71,31 +96,61 @@ public class CmdController {
 
         this.options.addOption(
             Option.builder("h")
-                  .longOpt("help")
+                  .longOpt(ParsedCmd.HELP.getOptionName())
                   .hasArg(false)
                   .desc("Show usage help.")
+                  .get());
+
+        this.options.addOption(
+            Option.builder("v")
+                  .longOpt(ParsedCmd.VERSION.getOptionName())
+                  .hasArg(false)
+                  .desc("Show version.")
                   .get());
     }
 
     public void printHelp() throws IOException {
-        var  helpFormatter = HelpFormatter.builder().setShowSince(false).get();
+
+        var helpFormatter = HelpFormatter
+            .builder()
+            .setShowSince(false)
+            .setComparator((_, _) -> 0) // Keeps creation order in the configureOptions() method
+            .get();
         helpFormatter.setSyntaxPrefix("Program usage:");
+        setHelpWidth(helpFormatter, MAX_WIDTH);
+
         String header = "Convert FFProbe chaptersList from JSON to CUE, CSV or CMD format.";
         String footer = "Version 1.3.1 (2026-03-04 15:09:35)";
 
         helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }
 
-    private ParsedResult processOptionsValues(CommandLine cmd) throws ParseException {
-        if (cmd.hasOption("help")) {
-            return ParsedResult.HELP;
+    @SuppressWarnings("SameParameterValue")
+    private void setHelpWidth(HelpFormatter helpFormatter, int maxWidth) {
+        if (helpFormatter.getSerializer() instanceof TextHelpAppendable output) {
+            output.setMaxWidth(maxWidth);
+        } else {
+            log.warn("The maximum output width cannot be set. The default value will be used.");
+        }
+    }
+
+    public void printVersion() {
+        System.out.println(CliApplication.APP_VERSION);
+    }
+
+    private ParsedCmd processOptionsValues(CommandLine cmd) throws ParseException {
+        if (cmd.hasOption(ParsedCmd.HELP.getOptionName())) {
+            return ParsedCmd.HELP;
+
+        } else if (cmd.hasOption(ParsedCmd.VERSION.getOptionName())) {
+            return ParsedCmd.VERSION;
 
         } else {
             this.inFileName = cmd.getOptionValue("in-file", "-");
             this.outFileName = cmd.getOptionValue("out-file", "-");
             this.outputFormat = cmd.getParsedOptionValue("format", OutputFormat.CUE);
 
-            return ParsedResult.CONVERT;
+            return ParsedCmd.CONVERT;
         }
     }
 
