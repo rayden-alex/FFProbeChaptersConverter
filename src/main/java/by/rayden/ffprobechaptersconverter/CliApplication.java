@@ -3,8 +3,8 @@ package by.rayden.ffprobechaptersconverter;
 import by.rayden.ffprobechaptersconverter.service.ConvertService;
 import by.rayden.ffprobechaptersconverter.service.CsvTransformer;
 import by.rayden.ffprobechaptersconverter.service.CueTransformer;
-import by.rayden.ffprobechaptersconverter.service.FFProbeTransformer;
 import by.rayden.ffprobechaptersconverter.service.FFMpegSliceCmdTransformer;
+import by.rayden.ffprobechaptersconverter.service.FFProbeTransformer;
 import by.rayden.ffprobechaptersconverter.service.OutputTransformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,23 @@ import java.util.List;
 
 public class CliApplication {
     public static final String APP_NAME = "FFProbeChaptersConverter";
+
+    public enum ExitStatusCode {
+        OK(0),
+        ERROR(1),
+        UNEXPECTED_ERROR(-1);
+
+        private final int intCode;
+
+        ExitStatusCode(int intCode) {
+            this.intCode = intCode;
+        }
+
+        public int getIntCode() {
+            return this.intCode;
+        }
+    }
+
     private static final Logger log = LoggerFactory.getLogger(CliApplication.class);
 
     private static final JsonMapper mapper = JsonMapper
@@ -39,11 +56,13 @@ public class CliApplication {
 
     public int run(String[] args) throws Exception {
         CmdController.ParsedResult parsedResult = this.cmdController.getParseResult(args);
+    public ExitStatusCode run(String[] args) throws Exception {
+        CmdController.ParsedCmd parsedCmd = this.cmdController.getParseResult(args);
 
-        switch (parsedResult) {
+        return switch (parsedCmd) {
             case HELP -> {
                 this.cmdController.printHelp();
-                return 0;
+                yield ExitStatusCode.OK;
             }
 
             case CONVERT -> {
@@ -53,20 +72,18 @@ public class CliApplication {
                     OutputFormat outputFormat = this.cmdController.getOutputFormat();
 
                     this.convertService.convert(inFileName, outFileName, outputFormat);
-                    return 0;
+                    yield ExitStatusCode.OK;
                 } catch (Exception e) {
                     log.error("Converting error!", e);
-                    return 1;
+                    yield ExitStatusCode.ERROR;
                 }
             }
 
             case ERROR -> {
                 this.cmdController.printHelp();
-                return 1;
+                yield ExitStatusCode.ERROR;
             }
-
-            default -> throw new IllegalStateException("Unexpected ParsedResult value: " + parsedResult);
-        }
+        };
     }
 
     public static JsonMapper getJsonMapper() {
