@@ -73,7 +73,7 @@ tasks.register('generateAotCache', JavaExec) {
 
     // Dynamically get the launcher from the project's toolchain settings to ensure
     // that javac (compilation) and java (cache generation in the generateAotCache task)
-    // use the same JDK 25 binary file.
+    // use the same JDK binary file.
     def service = project.extensions.getByType(JavaToolchainService)
     javaLauncher = service.launcherFor(java.toolchain)
 
