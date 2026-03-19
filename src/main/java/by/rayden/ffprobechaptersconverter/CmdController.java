@@ -120,8 +120,7 @@ public class CmdController {
         setHelpWidth(helpFormatter, MAX_WIDTH);
 
         String header = "Convert FFProbe chaptersList from JSON to CUE, CSV or CMD format.";
-        String footer = "Version 1.3.1 (2026-03-04 15:09:35)";
-
+        String footer = "Version " + CliApplication.APP_VERSION;
         helpFormatter.printHelp(CliApplication.APP_NAME, header, this.options, footer, true);
     }
 
