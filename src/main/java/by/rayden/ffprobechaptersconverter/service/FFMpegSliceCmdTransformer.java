@@ -9,6 +9,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -16,6 +18,12 @@ import java.util.Optional;
 
 public class FFMpegSliceCmdTransformer implements OutputTransformer {
     private static final Logger log = LoggerFactory.getLogger(FFMpegSliceCmdTransformer.class);
+    private static final ThreadLocal<DecimalFormat> DF = ThreadLocal.withInitial(() -> {
+        // Set Locale.ROOT to always use dot as decimal delimiter
+        var symbols = DecimalFormatSymbols.getInstance(Locale.ROOT);
+        return new DecimalFormat("0.000", symbols);
+    });
+    private static final double MILLIS_PER_SECOND = 1000.0;
 
     @Override
     public OutputFormat getOutputFormat() {
@@ -91,9 +99,7 @@ public class FFMpegSliceCmdTransformer implements OutputTransformer {
      * @return String formated as "s.sss" (seconds and millis part of second). For example "123.456".
      */
     private String formatTime(int millis) {
-        final double MILLIS_PER_SECOND = 1000.0;
-        // Set Locale.ROOT to always use dot as decimal delimiter
-        return String.format(Locale.ROOT, "%.3f", millis / MILLIS_PER_SECOND);
+        return DF.get().format(millis / MILLIS_PER_SECOND);
     }
 
 }
