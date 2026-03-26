@@ -55,16 +55,6 @@ public class CmdController {
     private OutputFormat outputFormat;
 
 
-    public ParsedCmd getParseResult(String[] args) {
-        try {
-            CommandLine cmd = new DefaultParser().parse(this.options, args);
-            return processOptionsValues(cmd);
-        } catch (ParseException e) {
-            log.error("Error parsing command line arguments: {}", e.getMessage());
-            return ParsedCmd.ERROR;
-        }
-    }
-
     public void configureOptions() {
         // Create "Options" from scratch in case this method will be called multiple times
         this.options = new Options();
@@ -107,6 +97,16 @@ public class CmdController {
                   .hasArg(false)
                   .desc("Show version.")
                   .get());
+    }
+
+    public ParsedCmd getParseResult(String[] args) {
+        try {
+            CommandLine cmd = new DefaultParser().parse(this.options, args);
+            return processOptionsValues(cmd);
+        } catch (ParseException e) {
+            log.error("Error parsing command line arguments: {}", e.getMessage());
+            return ParsedCmd.ERROR;
+        }
     }
 
     public void printHelp() throws IOException {

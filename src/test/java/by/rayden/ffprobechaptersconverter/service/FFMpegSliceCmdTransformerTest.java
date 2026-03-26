@@ -28,7 +28,6 @@ class FFMpegSliceCmdTransformerTest {
         transformer = new FFMpegSliceCmdTransformer();
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Test
     void testTransform() throws IOException {
         FFProbeChaptersMetadata metadata = getChaptersMetadata("FFProbeChapters_1.json");
