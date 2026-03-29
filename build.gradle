@@ -22,7 +22,7 @@ configurations {
 dependencies {
     compileOnly 'org.jetbrains:annotations:26.1.0'
 
-    implementation platform('tools.jackson:jackson-bom:3.1.0')
+    implementation platform('tools.jackson:jackson-bom:3.1.1')
     implementation 'tools.jackson.core:jackson-databind'
     implementation 'org.digitalmediaserver:cuelib-core:2.0.0'
     implementation 'commons-io:commons-io:2.21.0'

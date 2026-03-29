@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CliApplication {
     public static final String APP_NAME = "FFProbeChaptersConverter";
-    public static final String APP_VERSION = "1.3.3 (2026-03-26 08:40:43)";
+    public static final String APP_VERSION = "1.3.4 (2026-03-29 06:35:10)";
 
     public enum ExitStatusCode {
         OK(0),
