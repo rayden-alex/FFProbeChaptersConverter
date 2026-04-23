@@ -13,6 +13,10 @@ def currentVersion = project.version.toString()
 def projectName = project.name
 def buildTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
 
+if (!project.hasProperty('release.disablePush')) {
+    project.ext.set('release.disablePush', 'true')
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(26)
