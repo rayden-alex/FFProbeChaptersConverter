@@ -14,8 +14,8 @@ import tools.jackson.databind.json.JsonMapper;
 import java.util.List;
 
 public class CliApplication {
-    public static final String APP_NAME = "FFProbeChaptersConverter";
-    public static final String APP_VERSION = "1.3.5 (2026-04-21 08:33:19)";
+    public static final String APP_NAME = AppVersion.getName();
+    public static final String APP_VERSION = AppVersion.getVersion() + " (" + AppVersion.getBuildDate() + ")";
 
     public enum ExitStatusCode {
         OK(0),
