@@ -13,6 +13,12 @@ def currentVersion = project.version.toString()
 def projectName = project.name
 def buildTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
 
+scmVersion {
+    repository {
+        customKeyFile = file("${System.getProperty('user.home')}/.ssh/id_rsa")
+    }
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(26)
